@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/mainHomeFragment">
+
+    <fragment
+        android:id="@+id/mainHomeFragment"
+        android:name="com.fast.hero.screen.main.MainHomeFragment"
+        android:label="MainHomeFragment" >
+        <action
+            android:id="@+id/action_mainHomeFragment_to_onboardinMenuFragment"
+            app:destination="@id/onboardinMenuFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/onboardinMenuFragment"
+        android:name="com.fast.hero.screen.menu.OnboardinMenuFragment"
+        android:label="OnboardinMenuFragment" />
+</navigation>
