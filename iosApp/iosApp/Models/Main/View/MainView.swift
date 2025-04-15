@@ -3,10 +3,15 @@ import SwiftUI
 import ComposeApp
 
 struct MainView: View {
-    @StateObject private var viewModel = MainViewModel()
+    @StateObject private var viewModel: SkieMainViewModel
     @State private var state = MainViewState(time: "--:--", progress: 0.0, isRunning: false, feed: [])
 
     @ObservedObject var coordinator: AppCoordinator
+
+    init(coordinator: AppCoordinator, fastCore: FastCore) {
+            self.coordinator = coordinator
+            _viewModel = StateObject(wrappedValue: SkieMainViewModel(fastCore: fastCore))
+        }
 
     var body: some View {
         NavigationStack(path: $coordinator.path) {
@@ -33,7 +38,7 @@ struct MainView: View {
                 .onReceive(viewModel.$hasCompletedFast) { _ in
                     viewModel.resumeFast()
                 }
-                .onReceive(viewModel.$isRunning) { _ in
+                .onAppear {
                     viewModel.resumeFast()
                 }
                 .ignoresSafeArea(.keyboard) // Compose has own keyboard handler
@@ -43,9 +48,6 @@ struct MainView: View {
                     SettingsView(coordinator: coordinator)
                         .environmentObject(viewModel)
                 }
-            }
-            .onAppear {
-                viewModel.resumeFast()
             }
         }
     }

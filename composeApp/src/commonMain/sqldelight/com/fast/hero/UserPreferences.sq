@@ -1,0 +1,18 @@
+CREATE TABLE UserPreferences (
+    id INTEGER NOT NULL PRIMARY KEY,
+    selectedFast TEXT NOT NULL,
+    fastStartTimeInMillis INTEGER,
+    isRunning INTEGER NOT NULL,
+    isFirstTime INTEGER NOT NULL,
+    hasCompletedFast INTEGER NOT NULL
+);
+
+selectPreferences:
+SELECT * FROM UserPreferences LIMIT 1;
+
+insertOrReplace:
+INSERT OR REPLACE INTO UserPreferences(id, selectedFast, fastStartTimeInMillis, isRunning, isFirstTime, hasCompletedFast)
+VALUES (1, ?, ?, ?, ?, ?);
+
+deletePreferences:
+DELETE FROM UserPreferences;

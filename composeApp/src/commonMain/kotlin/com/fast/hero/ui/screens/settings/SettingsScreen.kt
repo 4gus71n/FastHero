@@ -41,7 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.mutableStateOf
 import com.fast.hero.ui.theme.FastHeroTheme
-import com.fast.hero.ui.utils.MockData
+import com.fast.hero.sdk.MockData
 
 data class SettingOptionList(
     val id: String,

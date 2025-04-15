@@ -1,7 +1,9 @@
 package com.fast.hero
 
-interface Platform {
-    val name: String
+import app.cash.sqldelight.db.SqlDriver
+
+interface SqlDriverContext {
+    fun getContext(): Any
 }
 
-expect fun getPlatform(): Platform
+expect fun getSqlDriver(context: SqlDriverContext?): SqlDriver

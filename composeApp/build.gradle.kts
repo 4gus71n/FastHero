@@ -1,3 +1,7 @@
+
+import org.gradle.declarative.dsl.schema.FqName.Empty.packageName
+import org.gradle.kotlin.dsl.commonMain
+import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -9,6 +13,14 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.composeuiviewcontroller)
+    alias(libs.plugins.sqlDelight)
+    alias(libs.plugins.skie)
+}
+
+skie {
+    features {
+        enableFlowCombineConvertorPreview = true
+    }
 }
 
 ComposeUiViewController {
@@ -24,6 +36,10 @@ kotlin {
         }
     }
 
+
+    // You must enable this!
+    explicitApiWarning()
+    
     listOf(
         iosX64(),
         iosArm64(),
@@ -31,13 +47,19 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
-            isStatic = true
+            export("org.jetbrains.kotlinx:kotlinx-coroutines-core")
         }
     }
 
     jvm("desktop")
 
     sourceSets {
+        all {
+            languageSettings.optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+            languageSettings.optIn("kotlinx.coroutines.FlowPreview")
+            languageSettings.optIn("kotlin.experimental.ExperimentalObjCName") // required for Combine interop
+        }
+        
         val desktopMain by getting
 
         androidMain.dependencies {
@@ -47,8 +69,14 @@ kotlin {
             implementation(libs.androidx.fragment.compose)
             implementation(libs.androidx.navigation.fragment)
             implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.sqlDelight.android)
+        }
+        iosMain.dependencies {
+            implementation(libs.sqlDelight.native)
         }
         commonMain.dependencies {
+            implementation(libs.kermit)
+            implementation(libs.sqlDelight.coroutinesExt)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
             implementation(compose.ui)
@@ -58,12 +86,13 @@ kotlin {
             implementation(libs.kolor)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(libs.kotlinx.coroutines.core)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.touchlab.skie.annotations)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }
@@ -110,3 +139,10 @@ compose.desktop {
         }
     }
 }
+
+sqldelight {
+    databases.create("AppDatabase") {
+        packageName.set("com.fast.hero")
+    }
+}
+

@@ -1,5 +1,6 @@
-package com.fast.hero.ui.utils
+package com.fast.hero.sdk
 
+import com.fast.hero.ui.screens.models.TimelineEntry
 import com.fast.hero.ui.screens.settings.SettingOptionList
 
 object MockData {
@@ -11,6 +12,129 @@ object MockData {
         val advice: String? = null, // Some advice or things to keep in mind. Can be null if no advices.
         val timestampInSeconds: Double // Timestamp in seconnds for when this happens
     )
+    
+    val defaultFeed = listOf(
+        TimelineEntry(
+            title = "Fat for Fuel!",
+            description = "When you fast, your body switches from burning sugar to burning fat for energy. It's like flipping a metabolic switch! 🔥",
+            emoji = "💪",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Autophagy Mode",
+            description = "Fasting triggers autophagy, a process where your cells clean out damaged parts and recycle them. It's like a deep clean for your body! 🧹",
+            emoji = "🧼",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Brain Booster",
+            description = "Fasting increases brain-derived neurotrophic factor (BDNF), which helps improve memory and learning. Stay sharp! 🧠",
+            emoji = "🤓",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Inflammation Fighter",
+            description = "Studies show fasting can reduce inflammation, helping with conditions like arthritis and asthma. Bye-bye, aches! 👋",
+            emoji = "🔥",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Immune System Reset",
+            description = "Going without food for a while encourages your body to recycle old immune cells and create new ones. A natural reboot! 🔄",
+            emoji = "🛡️",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Longevity Hack",
+            description = "Fasting has been linked to increased lifespan in many studies. It might just help you age like fine wine! 🍷",
+            emoji = "⏳",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Metabolism Booster",
+            description = "Intermittent fasting can speed up metabolism and improve fat-burning efficiency. More gains, less effort! 💥",
+            emoji = "🏋️",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Cell Repair Mode",
+            description = "During fasting, cells repair themselves and remove harmful waste. It's like hitting the refresh button! 🔄",
+            emoji = "🔧",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Hunger Hormone Tamer",
+            description = "Fasting helps regulate ghrelin, the hunger hormone, making it easier to control cravings. No more snack attacks! 🍕",
+            emoji = "🚫",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Heart Health Hero",
+            description = "Intermittent fasting can lower blood pressure, cholesterol, and triglycerides, reducing heart disease risk. ❤️",
+            emoji = "💖",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Ketone Power",
+            description = "Fasting boosts ketone production, which fuels your brain and muscles for improved performance! ⚡",
+            emoji = "⚡",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Insulin Sensitivity Boost",
+            description = "Fasting helps regulate blood sugar and improve insulin sensitivity, lowering the risk of diabetes. 🍭",
+            emoji = "📉",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Gut Rest & Reset",
+            description = "Fasting gives your digestive system a break, allowing it to heal and function better. No bloating, just bliss! 🌿",
+            emoji = "🍃",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Mood Enhancer",
+            description = "Fasting can increase dopamine and serotonin, making you feel happier and more energized! 😊",
+            emoji = "😄",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "More Growth Hormone",
+            description = "Fasting can increase growth hormone levels by up to 5 times, aiding muscle gain and fat loss. Gains incoming! 💪",
+            emoji = "🏆",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Better Sleep",
+            description = "Fasting can regulate your circadian rhythm and improve sleep quality. Say hello to deep rest! 💤",
+            emoji = "🌙",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Skin Glow Up",
+            description = "Autophagy from fasting helps clear out damaged cells, making your skin look fresher and younger! ✨",
+            emoji = "💆",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Simpler Meal Planning",
+            description = "Fewer meals = less cooking and fewer dishes. Fasting saves you time and effort! 🍽️",
+            emoji = "⏰",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "A Natural Detox",
+            description = "Your liver works better when fasting, helping flush out toxins naturally. No expensive juice cleanses needed! 🥤",
+            emoji = "🚿",
+            isPulsing = false
+        ),
+        TimelineEntry(
+            title = "Saves Money",
+            description = "Eating less often means spending less on food. Fasting is good for your wallet too! 💰",
+            emoji = "🤑",
+            isPulsing = false
+        )
+    ).shuffled().take(3)
 
     val fastingOptions = listOf(
         SettingOptionList(

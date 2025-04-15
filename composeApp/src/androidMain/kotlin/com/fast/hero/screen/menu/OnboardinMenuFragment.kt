@@ -14,7 +14,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.fast.hero.screen.main.CountdownViewModel
 import com.fast.hero.ui.screens.settings.SettingsScreen
-import com.fast.hero.ui.utils.MockData
+import com.fast.hero.sdk.MockData
 
 class OnboardinMenuFragment : Fragment() {
     private val countdownViewModel by activityViewModels<CountdownViewModel>()

@@ -18,6 +18,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.fast.hero.ui.screens.main.MainScreen
 import com.fast.hero.R
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 
@@ -31,8 +34,8 @@ class MainHomeFragment : Fragment() {
     ): View? {
         return ComposeView(requireContext()).apply {
             setContent {
-                val progress by viewModel.progress.collectAsStateWithLifecycle()
-                val time by viewModel.time.collectAsStateWithLifecycle()
+                val progress by viewModel.progress.collectAsStateWithLifecycle(initialValue = 0f)
+                val time by viewModel.time.collectAsStateWithLifecycle(initialValue = "--:--")
                 val isRunning by viewModel.isFastingRunning.collectAsStateWithLifecycle(false)
                 val feed by viewModel.feed.collectAsStateWithLifecycle(emptyList())
 
@@ -50,7 +53,7 @@ class MainHomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch { 
-            merge(viewModel.selectedFast, viewModel.isFastingRunning)
+            viewModel.shouldResumeFast
                 .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .collect {
                     viewModel.resumeFast()

@@ -11,7 +11,7 @@ import SwiftUI
 import ComposeApp
 
 struct SettingsView: View {
-    @EnvironmentObject var countdownViewModel: MainViewModel
+    @EnvironmentObject var countdownViewModel: SkieMainViewModel
     @StateObject private var viewModel = SettingsViewModel()
 
     @ObservedObject var coordinator: AppCoordinator

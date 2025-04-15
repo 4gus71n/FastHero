@@ -1,6 +1,7 @@
 package com.fast.hero
 
 import androidx.compose.runtime.Composable
+import com.fast.hero.sdk.FastCore
 import com.fast.hero.ui.screens.main.MainScreen
 import com.fast.hero.ui.screens.models.TimelineEntry
 import com.github.guilhe.kmp.composeuiviewcontroller.ComposeUIViewController

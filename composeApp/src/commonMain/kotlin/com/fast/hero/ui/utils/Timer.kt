@@ -97,7 +97,7 @@ internal fun CenterProgress(
                 Text(
                     modifier = Modifier.padding(top = 25.dp),
                     text = elapsed,
-                    style = MaterialTheme.typography.displayLarge,
+                    style = MaterialTheme.typography.displayMedium,
                     fontStyle = FontStyle.Normal,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = elapsedAlpha)
                 )
