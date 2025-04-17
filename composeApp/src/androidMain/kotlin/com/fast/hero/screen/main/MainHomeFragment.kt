@@ -60,6 +60,11 @@ class MainHomeFragment : Fragment() {
                 }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.resumeFast()
+    }
     
     private fun onDispatchAction() {
         val selectedFast = viewModel.findSelectedFast()

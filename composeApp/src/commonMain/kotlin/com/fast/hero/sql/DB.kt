@@ -36,7 +36,8 @@ class UserPreferencesRepository(sqlDriver: SqlDriver) {
                 selectedFast = it.selectedFast,
                 fastStartTimeInMillis = it.fastStartTimeInMillis,
                 isRunning = it.isRunning != 0L,
-                isFirstTime = it.isFirstTime != 0L
+                isFirstTime = it.isFirstTime != 0L,
+                hasCompletedFast = it.hasCompletedFast != 0L
             )
         } ?: UserPreferences()
     }

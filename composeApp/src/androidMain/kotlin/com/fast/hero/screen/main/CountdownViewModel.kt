@@ -1,6 +1,7 @@
 package com.fast.hero.screen.main
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import com.fast.hero.FastHeroApplication
 import kotlinx.coroutines.flow.*
@@ -22,7 +23,8 @@ class CountdownViewModel(
         fastCore.observeIsFastRunning
     ) { fastId, isRunning ->
         "$fastId$isRunning"
-    }.distinctUntilChanged()
+    }
+    .distinctUntilChanged()
     
     fun findSelectedFast() = fastCore.findSelectedFast()
     fun resumeFast() = fastCore.resumeFast()

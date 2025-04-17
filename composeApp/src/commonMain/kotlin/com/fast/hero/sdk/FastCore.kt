@@ -30,12 +30,14 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
-class FastCore(
+const val IS_FASTCORE_DEBUG = true
+
+public class FastCore(
     driver: SqlDriver,
     now: (() -> Long)
 ) {
-    val preferences = UserPreferencesRepository(driver)
-    val getNowInMillis = now
+    private val preferences = UserPreferencesRepository(driver)
+    private val getNowInMillis = now
 
     private val logger = Logger.withTag("FastCore")
 
@@ -51,7 +53,7 @@ class FastCore(
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
     
-    val time: SharedFlow<String> = _time.asSharedFlow().apply {
+    public val time: SharedFlow<String> = _time.asSharedFlow().apply {
         onEach { logger.d("Time: $it") }
     }
 
@@ -60,23 +62,21 @@ class FastCore(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
-    
-    val progress: SharedFlow<Float> = _progress.asSharedFlow().apply { 
+
+    public val progress: SharedFlow<Float> = _progress.asSharedFlow().apply { 
         onEach { logger.d("Progress: $it") }
     }
-    
-    val observeIsFastRunning = observePreferences()
+
+    public val observeIsFastRunning: SharedFlow<Boolean> = observePreferences()
         .filterNotNull()
         .map { it.isRunning != 0L }
         .distinctUntilChanged()
-        .onEach { logger.d("Is Fast Running: $it") }
         .shareIn(coroutineScope, SharingStarted.Lazily, 1)
-    
-    val observeSelectedFastId = observePreferences()
+
+    public val observeSelectedFastId: SharedFlow<String> = observePreferences()
         .filterNotNull()
         .map { it.selectedFast }
         .distinctUntilChanged()
-        .onEach { logger.d("Selected Fast ID: $it")  }
         .shareIn(coroutineScope, SharingStarted.Lazily, 1)
     
     private fun observePreferences() = preferences.observePreferences()
@@ -86,56 +86,61 @@ class FastCore(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
-    
-    val feed: SharedFlow<List<TimelineEntry>> = _feed.asSharedFlow().apply { 
+
+    public val feed: SharedFlow<List<TimelineEntry>> = _feed.asSharedFlow().apply { 
         onEach { logger.d("Feed: $it") }
     }
     
 
     // Gets or sets the fasting start date in shared preferences
-    var fastStartDateInMillis: Long?
+    private var fastStartDateInMillis: Long?
         get() {
-            return  preferences.getPreferences()?.fastStartTimeInMillis
+            return  preferences.getPreferences().fastStartTimeInMillis
         }
         set(value) {
             preferences.saveFastStartTimeInMillis(value)
         }
     
     // Gets or sets the fasting ID in shared preferences
-    var fastId: String
+    public var fastId: String
         get() = findSelectedFast()?.id ?: ""
         set(value) {
             preferences.saveSelectedFast(value)
         }
 
     // Gets or sets the fasting timer state (running or stopped)
-    var isRunning: Boolean
-        get() = preferences.getPreferences()?.isRunning ?: false
+    private var isRunning: Boolean
+        get() = preferences.getPreferences().isRunning
         set(value) {
             preferences.saveIsRunning(value)
         }
 
-    var hasCompletedFast: Boolean
-        get() = preferences.getPreferences()?.hasCompletedFast ?: false
+    private var hasCompletedFast: Boolean
+        get() = preferences.getPreferences().hasCompletedFast
         set(value) {
             preferences.saveHasCompletedFast(value)
         }
 
     // Tells if the app has been installed for the first time
-    var isFirstTime: Boolean
-        get() = preferences.getPreferences()?.isFirstTime ?: false
+    private var isFirstTime: Boolean
+        get() = preferences.getPreferences().isFirstTime
         set(value) {
             preferences.saveIsFirstTime(value)
         }
     
     
-    fun findSelectedFast(): SettingOptionList? {
-        return preferences.getPreferences()?.selectedFast?.let { selectedFast ->
+    public fun findSelectedFast(): SettingOptionList? {
+        return preferences.getPreferences().selectedFast.let { selectedFast ->
             MockData.fastingOptions.find { it.id == selectedFast }
         }
     }
 
-    private val wizardMatrix = listOf(
+    private val wizardMatrix = listOfNotNull(
+        if (IS_FASTCORE_DEBUG) {
+            FastingMetrics(id = "TEST", difficulty = 2, compromise = 9, doability = 10)
+        } else {
+            null
+        },
         FastingMetrics(id = "12:12", difficulty = 2, compromise = 9, doability = 10),
         FastingMetrics(id = "14:10", difficulty = 4, compromise = 2, doability = 9),
         FastingMetrics(id = "16:8", difficulty = 5, compromise = 3, doability = 8),
@@ -145,7 +150,7 @@ class FastCore(
         FastingMetrics(id = "14:10 Crescendo", difficulty = 7, compromise = 1, doability = 9)
     )
 
-    fun sortRecommendationList(
+    public fun sortRecommendationList(
         difficulty: Int,
         compromise: Int,
         doability: Int
@@ -198,6 +203,7 @@ class FastCore(
                     ) 
 
                     if (remaining <= 0f) {
+                        logger.d("Fast completed! remaining = $remaining")
                         hasCompletedFast = true
                         break
                     }
@@ -212,7 +218,7 @@ class FastCore(
     /**
      * Toggles the fasting timer on or off.
      */
-    fun toggleTimer() {
+    public fun toggleTimer() {
         logger.d("Call toggleTimer")
         when {
             hasCompletedFast -> stopTimer()
@@ -229,7 +235,7 @@ class FastCore(
     /**
      * Stops the fasting timer and resets progress.
      */
-    fun stopTimer() {
+    public fun stopTimer() {
         logger.d("Call stopTimer")
         countDownJob?.cancel()
         isRunning = false
@@ -244,7 +250,7 @@ class FastCore(
         )
     }
 
-    fun formatClockTime(seconds: Long): String {
+    private fun formatClockTime(seconds: Long): String {
         val hours = seconds / 3600
         val minutes = (seconds % 3600) / 60
         val secs = seconds % 60
@@ -259,7 +265,7 @@ class FastCore(
     /**
      * Resumes the fasting timer if a fast is in progress.
      */
-    fun resumeFast() {
+    public fun resumeFast() {
         when {
             hasCompletedFast -> {
                 logger.d("Resume Fast > Has fully completed a fast")

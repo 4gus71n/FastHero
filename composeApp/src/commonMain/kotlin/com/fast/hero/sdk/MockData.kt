@@ -136,7 +136,17 @@ object MockData {
         )
     ).shuffled().take(3)
 
-    val fastingOptions = listOf(
+    val fastingOptions = listOfNotNull(
+        if (IS_FASTCORE_DEBUG) {
+            SettingOptionList(
+                id = "TEST",
+                title = "TEST",
+                description = "5 seconds fast. Just for testing.",
+                fastingTimeInSeconds = 5
+            )
+        } else {
+            null
+        },
         SettingOptionList(
             id = "12:12",
             title = "12:12 - Easy/Starter",
